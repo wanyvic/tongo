@@ -18,6 +18,7 @@ type Tracer struct {
 	counter             int
 	limit               int
 	softLimit           int
+	print               bool
 }
 
 type TxTree struct {
@@ -33,6 +34,7 @@ type TraceOptions struct {
 	time               int64
 	checkSignature     bool
 	predefinedAccounts map[ton.AccountID]tlb.ShardAccount
+	print              bool
 }
 
 type accountGetter interface {
@@ -45,6 +47,13 @@ func WithConfig(c *boc.Cell) TraceOption {
 		var err error
 		o.config, err = c.ToBocBase64()
 		return err
+	}
+}
+
+func WithPrint(print bool) TraceOption {
+	return func(o *TraceOptions) error {
+		o.print = print
+		return nil
 	}
 }
 
@@ -127,6 +136,7 @@ func NewTraceBuilder(options ...TraceOption) (*Tracer, error) {
 		time:               time.Now().Unix(),
 		checkSignature:     false,
 		predefinedAccounts: make(map[ton.AccountID]tlb.ShardAccount),
+		print:              false,
 	}
 	for _, o := range options {
 		err := o(&option)
@@ -156,6 +166,7 @@ func NewTraceBuilder(options ...TraceOption) (*Tracer, error) {
 		blockchain:          option.blockchain,
 		limit:               option.limit,
 		softLimit:           option.softLimit,
+		print:               option.print,
 	}, nil
 }
 
@@ -242,6 +253,12 @@ func (t *Tracer) Run(ctx context.Context, message tlb.Message) (*TxTree, error) 
 		}
 		if err := t.e.setLibs(libsBoc); err != nil {
 			return nil, err
+		}
+	}
+	if t.print {
+		fmt.Printf("--------------------\n")
+		for accountID, state := range t.currentShardAccount {
+			fmt.Printf("account: %v, balance: %v\n", accountID, state.Account.Account.Storage.Balance.Grams)
 		}
 	}
 	result, err := t.e.Emulate(state, message)

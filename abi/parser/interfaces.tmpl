@@ -64,7 +64,7 @@ func (c ContractInterface) recursiveImplements(other ContractInterface) bool {
 	return false
 }
 
-var knownContracts = map[ton.Bits256]knownContractDescription{
+var KnownContracts = map[ton.Bits256]knownContractDescription{
 {{- range $hash, $interface := .KnownHashes }}
     ton.MustParseHash("{{ $hash }}"):  {
     contractInterfaces: []ContractInterface{ {{ $interface.Name }} },

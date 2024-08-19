@@ -988,7 +988,7 @@ func (c ContractInterface) recursiveImplements(other ContractInterface) bool {
 	return false
 }
 
-var knownContracts = map[ton.Bits256]knownContractDescription{
+var KnownContracts = map[ton.Bits256]knownContractDescription{
 	ton.MustParseHash("0dceed21269d66013e95b19fbb5c55a6f01adad40837baa8e521cde3a02aa46c"): {
 		contractInterfaces: []ContractInterface{WalletHighloadV1R2},
 		getMethods:         []InvokeFn{},

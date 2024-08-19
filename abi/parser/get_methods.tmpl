@@ -9,6 +9,14 @@ var KnownGetMethodsDecoder = map[string][]func(tlb.VmStack) (string, any, error)
 {{- end }}
 }
 
+var KnownGetMethodNameByResultTypes = map[string]string{
+{{- range $method := .GetMethods}}
+    {{- range $name, $type := $method.ResultTypes }}
+    "{{ $name }}": "{{ $method.Name }}",
+    {{- end }}
+{{- end }}
+}
+
 var KnownSimpleGetMethods = map[int][]func(ctx context.Context, executor Executor, reqAccountID ton.AccountID) (string, any, error){
 {{- range $id, $methods := .SimpleMethods}}
     {{ $id }}: {

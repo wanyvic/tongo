@@ -172,11 +172,10 @@ func NewEmulatorFromBOCsBase64(code, data, config string, opts ...Option) (*Emul
 			return nil, err
 		}
 	}
-	runtime.SetFinalizer(&e, destroy)
 	return &e, nil
 }
 
-func destroy(e *Emulator) {
+func Destroy(e *Emulator) {
 	C.tvm_emulator_destroy(e.emulator)
 }
 

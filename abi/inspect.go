@@ -228,7 +228,11 @@ func getCodeInfo(ctx context.Context, code []byte, resolver libResolver) (*codeI
 		if !ok {
 			return nil, fmt.Errorf("library not found")
 		}
-		root = cell
+		// avoid concurrent access to the same cell
+		root, err = deepCopyCell(cell)
+		if err != nil {
+			return nil, err
+		}
 	}
 	c, err := root.NextRef()
 	if err != nil {
@@ -279,4 +283,22 @@ func getCodeInfo(ctx context.Context, code []byte, resolver libResolver) (*codeI
 		methods[int64(key)] = struct{}{}
 	}
 	return &codeInfo{hash: h, methods: methods}, nil
+}
+
+func deepCopyCell(cell *boc.Cell) (*boc.Cell, error) {
+	if cell == nil {
+		return nil, nil
+	}
+	bocData, err := cell.ToBoc()
+	if err != nil {
+		return nil, err
+	}
+	cells, err := boc.DeserializeBoc(bocData)
+	if err != nil {
+		return nil, err
+	}
+	if len(cells) == 0 {
+		return nil, fmt.Errorf("failed to find a root cell")
+	}
+	return cells[0], nil
 }

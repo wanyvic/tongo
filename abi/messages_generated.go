@@ -2515,6 +2515,7 @@ type JettonBurnNotificationMsgBody struct {
 	Amount              tlb.VarUInteger16
 	Sender              tlb.MsgAddress
 	ResponseDestination tlb.MsgAddress
+	CustomPayload       *JettonPayload `tlb:"maybe^"`
 }
 
 type MultisigApproveAcceptedMsgBody struct {

@@ -108,7 +108,8 @@
     </internal>
     <internal name="jetton_burn_notification" >
         burn_notification#7bdd97de query_id:uint64 amount:(VarUInteger 16)
-        sender:MsgAddress response_destination:MsgAddress = InternalMsgBody;
+        sender:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^JettonPayload)
+        = InternalMsgBody;
     </internal>
     <internal name="jetton_notify" >
         transfer_notification#7362d09c query_id:uint64 amount:(VarUInteger 16)

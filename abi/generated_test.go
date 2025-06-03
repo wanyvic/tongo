@@ -1557,6 +1557,18 @@ func TestMessageDecoder(t *testing.T) {
 			},
 		},
 		{
+			name:       "jetton burn notification payload",
+			boc:        "te6ccgEBAgEAWwABqXvdl94AAAAAAAAAAFAdFM3vaADMs0jtFXGLiJW8UHxElzWWoES4+Fro5gqJb9Jm0bFFNwAZlmkdoq4xcRK3ig+Ikuay1AiXHwtdHMFRLfpM2jYopvABAAFg",
+			interfaces: []ContractInterface{JettonMaster},
+			wantOpName: JettonBurnNotificationMsgOp,
+			wantValue: JettonBurnNotificationMsgBody{
+				QueryId:             8545759942892049807,
+				Amount:              tlb.VarUInteger16(*big.NewInt(1625650)),
+				Sender:              mustAccountIDToMsgAddress("0:6ccd325a858c379693fae2bcaab1c2906831a4e10a6c3bb44ee8b615bca1d220"),
+				ResponseDestination: tlb.MsgAddress{SumType: "AddrNone"},
+			},
+		},
+		{
 			name:       "telemint deploy",
 			boc:        "te6ccgEBBAEA7AADs0Y3KJoZbSToF2FWrsk5n2kJkqyX4X6Ap8VP92juX4NPlNJSZUBwdJYp6pn3SVlg0xt+7QjJLdBJYx7JVdtEr9ZqVVgPAAAAA2QEUxhkBFOuCHpoZW5nc2h1wAECAwBgAWh0dHBzOi8vbmZ0LmZyYWdtZW50LmNvbS91c2VybmFtZS96aGVuZ3NodS5qc29uAGGACBG0dlFtgMtLJ8IHIk03VVOL8ZXXgY07PhVXdWVTJK1qMG3EIAAAoAABwgABJ1AQAEsABQBkgAgRtHZRbYDLSyfCByJNN1VTi/GV14GNOz4VV3VlUyStcA==",
 			wantOpName: TelemintDeployMsgOp,
